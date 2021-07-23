@@ -1,8 +1,3 @@
-/*
-картинки-заглушки
-https://via.placeholder.com/150x100
-*/
-
 *,
 ::before,
 ::after {
@@ -21,6 +16,8 @@ https://via.placeholder.com/150x100
     font-family: Geometria, Arial, Helvetica, sans-serif;
     background-color: #2c7580;
     color: #ccc;
+    overflow: hidden;
+    user-select: none;
 }
 
 a {
@@ -49,11 +46,78 @@ img {
     overflow: hidden !important;
 }
 
+.actions li {
+    width: 100%;
+    padding: 2px 15px;
+    background-color: gray;
+    margin-bottom: 2px;
+    border-radius: 10px;
+    text-align: center;
+    max-width: 100px;
+    cursor: pointer;
+}
+
+.actions li:hover {
+    background-color: #442580;
+}
+
 .wrapper {
     position: relative;
-    margin: 50px auto;
+    margin: 10px auto;
     min-width: 400px;
     width: 400px;
     min-height: 400px;
-    outline: 2px dashed gold;
+    outline: 2px dashed black;
+}
+
+.select {
+    position: relative;
+    width: 200px;
+    background: gray;
+}
+
+.select.hide .select__list {
+    display: none;
+}
+
+.select__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 50px;
+    padding: 5px 10px;
+    border: 1px solid black;
+    cursor: pointer;
+}
+
+.select__header svg {
+    transition: transform 0.2s;
+}
+
+.select:not(.hide) svg {
+    transform: rotateX(180deg);
+}
+
+.select__list {
+    width: 100%;
+    position: absolute;
+}
+
+.select__item:nth-child(even) {
+    background-color: gray;
+}
+
+.select__item:nth-child(odd) {
+    background-color: darkgray;
+}
+
+.select__item {
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.select__item:hover {
+    transform: translateX(5px);
+    box-shadow: 2px 2px 2px black;
 }
