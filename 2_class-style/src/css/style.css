@@ -1,0 +1,144 @@
+*,
+::before,
+::after {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+.page {
+    min-height: 100%;
+}
+
+.page-body {
+    min-height: 100%;
+    font-size: 18px;
+    font-family: Geometria, Arial, Helvetica, sans-serif;
+    background-color: #2c7580;
+    color: #ccc;
+    overflow: hidden;
+    user-select: none;
+}
+
+li {
+    list-style-type: none;
+}
+
+/*безопасное скрытие элемента*/
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    clip: rect(0 0 0 0);
+    overflow: hidden;
+}
+
+.wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 10px 0;
+
+    margin: 50px auto;
+    padding: 10px;
+    min-width: 400px;
+    width: 400px;
+    min-height: 400px;
+    outline: 2px solid black;
+}
+
+.select {
+    position: relative;
+    width: 200px;
+    background: gray;
+}
+
+.select.hide .select__list {
+    display: none;
+}
+
+.select__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 50px;
+    padding: 5px 10px;
+    border: 1px solid black;
+    cursor: pointer;
+}
+
+.select-checked {
+    background-color: green;
+    color: #cccccc;
+    font-weight: bold;
+}
+
+.select__header:disabled {
+    cursor: not-allowed;
+}
+
+.select__header::after {
+    content: url("../img/triangle.svg");
+    transition: transform 0.2s;
+}
+
+.select:not(.hide) .select__header::after  {
+    transform: rotateX(180deg);
+}
+
+.select__list {
+    width: 100%;
+    border: 1px solid black;
+    border-top: 0;
+    position: absolute;
+    background: gray;
+    z-index: 1;
+}
+
+.select__item {
+    padding: 5px 10px;
+    border-bottom: 1px solid black;
+    cursor: pointer;
+    opacity: 0;
+    transition: transform 0.2s;
+    background: inherit;
+
+    animation-name: show;
+    animation-duration: 0.5s;
+    animation-fill-mode: forwards;
+}
+
+.select__item:hover {
+    position: relative;
+    transform: translateX(5px);
+    box-shadow: 2px 2px 2px black;
+    color: black;
+    z-index: 1;
+}
+
+.select__item:last-child {
+    border-bottom: none;
+}
+
+.select__item:first-letter {
+    text-transform: uppercase;
+}
+
+.select__item.select__item--selected {
+    background: green;
+    position: relative;
+    transform: translateX(5px);
+    box-shadow: 2px 2px 2px black;
+    z-index: 1;
+    border-bottom: 1px solid black;
+}
+
+@keyframes show {
+    100% {
+        opacity: 1;
+    }
+}
