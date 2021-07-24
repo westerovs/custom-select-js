@@ -1,10 +1,7 @@
-import { getResponse } from './response.js'
+import {getResponse} from './response.js'
 import {render, findClearActiveClass} from './utils.js'
 import {createTemplateSelect} from './view/select.js'
 import {createTemplateOption} from './view/option.js'
-
-getResponse()
-    .then(data => console.log(data.success))
 
 /*
 Возможности:
@@ -21,17 +18,28 @@ getResponse()
 - Количество показанных item
 */
 const wrapper = document.querySelector('.wrapper')
-render(wrapper, createTemplateSelect('Выбрать дату'))
-render(wrapper, createTemplateSelect('Выбрать время'))
+
+const renderSelect = (container, title) => {
+    render(container, createTemplateSelect(`${ title }`))
+}
+
+renderSelect(wrapper, 'Выбрать день')
+renderSelect(wrapper, 'Выбрать время')
 
 const select = document.querySelector('.select')
 const selectHeader = select.querySelector('.select__header')
 const selectList = select.querySelector('.select__list')
 
-// mock
-for (let i = 0; i < 15; i++) {
-    render(selectList, createTemplateOption(i))
+const renderOptions = () => {
+    getResponse()
+        .then(data => {
+            if (data.success) {
+                data.days.forEach(day => render(selectList, createTemplateOption(day)))
+            }
+        })
 }
+
+renderOptions()
 
 const selectItems = selectList.querySelectorAll('.select__item')
 const selectItemClear = select.querySelector('.select__item--clear')
