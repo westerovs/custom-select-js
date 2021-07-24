@@ -13,16 +13,16 @@ const actions = document.querySelector('.actions')
 //             break
 //
 //         case 'get':
-//             // if (select.selectedItem) {
-//             //     printDataToLog('#log', select.selectedItem.label)
+//             // if (main.selectedItem) {
+//             //     printDataToLog('#log', main.selectedItem.label)
 //             // }
 //             break
 //         case 'set':
-//             // select.selectByIndex(5)
+//             // main.selectByIndex(5)
 //             break
 //
 //         case 'clear':
-//             // select.clear()
+//             // main.clear()
 //             break
 //         case 'destroy':
 //             destroySelect()
@@ -63,16 +63,16 @@ const actions = document.querySelector('.actions')
 
 //
 //
-// const select = document.querySelector('.select')
-// const selectHeader = select.querySelector('.select__header')
+// const main = document.querySelector('.main')
+// const selectHeader = main.querySelector('.select__header')
 //
 //
 // const openSelect = () => {
-//     select.classList.toggle('hide')
+//     main.classList.toggle('hide')
 // }
 //
 // const closeSelect = () => {
-//     select.classList.toggle('hide')
+//     main.classList.toggle('hide')
 // }
 //
 //

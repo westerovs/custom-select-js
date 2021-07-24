@@ -63,11 +63,16 @@ img {
 
 .wrapper {
     position: relative;
-    margin: 10px auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px 0;
+
+    margin: 50px auto;
+    padding: 10px;
     min-width: 400px;
     width: 400px;
     min-height: 400px;
-    outline: 2px dashed black;
+    outline: 2px solid black;
 }
 
 .select {
@@ -91,21 +96,32 @@ img {
     cursor: pointer;
 }
 
+.select-checked {
+    background-color: green;
+    color: #cccccc;
+    font-weight: bold;
+}
+
 .select__header:disabled {
     cursor: not-allowed;
 }
 
-.select__header svg {
+.select__header::after {
+    content: url("../img/triangle.svg");
     transition: transform 0.2s;
 }
 
-.select:not(.hide) svg {
+.select:not(.hide) .select__header::after  {
     transform: rotateX(180deg);
 }
 
 .select__list {
     width: 100%;
+    border: 1px solid black;
+    border-top: 0;
     position: absolute;
+    background: gray;
+    z-index: 1;
 }
 
 .select__item:nth-child(even) {
@@ -139,12 +155,10 @@ img {
     border-bottom: none;
 }
 
-
 @keyframes show {
     100% {
         opacity: 1;
     }
-
 }
 
 .select__item:hover {
