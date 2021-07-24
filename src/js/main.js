@@ -1,6 +1,10 @@
+import { getResponse } from './response.js'
 import {render, findClearActiveClass} from './utils.js'
 import {createTemplateSelect} from './view/select.js'
 import {createTemplateOption} from './view/option.js'
+
+getResponse()
+    .then(data => console.log(data.success))
 
 /*
 Возможности:
