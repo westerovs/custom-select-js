@@ -11,18 +11,31 @@
 - уничтожить select
 * */
 
+const select = document.querySelector('.select')
+const selectHeader = select.querySelector('.select__header')
+const selectItems = select.querySelectorAll('.select__item')
 
-export default class Select {
-    constructor({
-        selector,
-        label,
-        url,
-        onSelect
-    }) {
-    
-    }
-    
-    init = () => {
-        console.log('init')
-    }
+const open = () => {
+    select.classList.toggle('hide')
 }
+
+const close = (e) => {
+    if (e.target.closest('.select')) return
+    select.classList.add('hide')
+}
+
+const setDefaultIndex = (index) => {
+    Array.from(selectItems).find((item, i) => {
+        if (i === index) item.classList.add('select__item--selected')
+    })
+}
+
+const createSelect = (defaultIndex ) => {
+    selectHeader.addEventListener('click', open)
+    document.addEventListener('click', close)
+    setDefaultIndex(defaultIndex)
+}
+
+createSelect(2)
+
+

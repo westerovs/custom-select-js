@@ -1,45 +1,33 @@
-import Select  from './select.js';
+const actions = document.querySelector('.actions')
 
-const select = new Select({
-    selector: '#select',
-    label: 'Выберите технологию',
-    url: 'https://private-c6a57b-selects1.apiary-mock.com/work-hours',
-    onSelect(selectedItem) {
-        console.log(selectedItem);
-    }
-});
-
-select.init()
-
-const actions = document.querySelector('.actions');
 actions.addEventListener('click', e => {
     switch (e.target.dataset.type) {
         case 'open':
-            // select.open();
-            break;
+            // select.open()
+            break
         case 'close':
-            // select.close();
-            break;
+            // select.close()
+            break
         case 'destroy':
-            // select.destroy();
-            break;
+            // select.destroy()
+            break
         case 'get':
             // if (select.selectedItem) {
-            //     printDataToLog('#log', select.selectedItem.label);
+            //     printDataToLog('#log', select.selectedItem.label)
             // }
-            break;
+            break
         case 'set':
-            // select.selectByIndex(5);
-            break;
+            // select.selectByIndex(5)
+            break
 
         case 'clear':
-            // select.clear();
-            break;
+            // select.clear()
+            break
 
         default:
-            break;
+            break
     }
-});
+})
 
 
 

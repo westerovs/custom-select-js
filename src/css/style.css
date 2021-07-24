@@ -84,10 +84,15 @@ img {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: 100%;
     height: 50px;
     padding: 5px 10px;
     border: 1px solid black;
     cursor: pointer;
+}
+
+.select__header:disabled {
+    cursor: not-allowed;
 }
 
 .select__header svg {
@@ -115,9 +120,36 @@ img {
     padding: 5px 10px;
     cursor: pointer;
     transition: transform 0.2s;
+    animation-name: show;
+    animation-duration: 0.5s;
+    animation-fill-mode: forwards;
+    opacity: 0;
+}
+
+.select__item.select__item--selected {
+    background: blue;
+    position: relative;
+    transform: translateX(5px);
+    box-shadow: 2px 2px 2px black;
+    z-index: 1;
+    border-bottom: 1px solid black;
+}
+
+.select__item.select__item--selected:last-child {
+    border-bottom: none;
+}
+
+
+@keyframes show {
+    100% {
+        opacity: 1;
+    }
+
 }
 
 .select__item:hover {
+    position: relative;
     transform: translateX(5px);
     box-shadow: 2px 2px 2px black;
+    z-index: 1;
 }
