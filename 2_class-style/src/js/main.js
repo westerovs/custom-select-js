@@ -1,15 +1,5 @@
 import {getResponse} from './response.js'
-import {getDay} from './utils.js'
-
-const timeArr = [
-    '10:10',
-    '20:10',
-    '30:10',
-    '$0:10',
-    '50:10',
-    '70:10',
-    '110:10',
-]
+import {render, findRemoveClass, getDay, getTimes, timeArr, } from './utils.js'
 
 class Select {
     constructor(props) {
@@ -63,17 +53,19 @@ class Select {
         return `<li class="select__item">${ props }</li>`
     }
     
+    renderTimeOptions = async (day) => {
+        console.log(day)
     
-    render = (container, template, place = 'beforeend') => {
-        if (container instanceof Element) {
-            container.insertAdjacentHTML(place, template)
-        }
-    }
-    
-    renderTimeOptions = () => {
-        timeArr.forEach(item => {
-            this.render(this.selectTimeList, this.createTemplateOptionTime(item))
-        })
+        await getResponse()
+            .then(data => {
+                const startTime = data.time[day].start
+                const endTime = data.time[day].end
+                
+                getTimes(startTime, endTime)
+                // timeArr.forEach(item => {
+                //     render(this.selectTimeList, this.createTemplateOptionTime(item))
+                // })
+            })
     }
     
     renderDayOptions = async (type) => {
@@ -82,19 +74,15 @@ class Select {
         this.optionReset.innerText = 'Loading...'
         
         await getResponse()
-            .then(() => {
+            .then(data => {
                 if (type === 'days') {
                     // установить отображаемое количество дней в селекте
                     for (let i = 0; i < 15; i++) {
-                        this.render(this.selectList, this.createTemplateOption(getDay(i), i))
+                        render(this.selectList, this.createTemplateOption(getDay(i), i))
                     }
                     this.optionReset.innerText = this.curText
                 }
             })
-    }
-    
-    findRemoveClass = (node, className = 'select__item--selected') => {
-        Array.from(node).find(item => item.classList.remove(`${ className }`))
     }
     
     setDefaultOption = (defaultIndex) => {
@@ -108,6 +96,9 @@ class Select {
                         this.selectHeader.classList.add('select-checked')
                         this.input.value = item.dataset.value
                         
+    
+                        const dayWeek = +item.dataset.day
+                        this.renderTimeOptions(dayWeek)
                         this.unblockTimeSelect()
                     }
                 })
@@ -121,7 +112,7 @@ class Select {
         this.selectHeader.innerText = e.target.innerText
         // в input записываем дату с выбранного эл-та
         this.input.value = e.target.dataset.value
-        console.log(this.input.value)
+        // console.log(this.input.value)
     }
     
     clickOnOption = (e) => {
@@ -130,14 +121,15 @@ class Select {
             this.resetSelect()
             return
         }
-    
-        this.findRemoveClass(this.selectItems)
+        
+        findRemoveClass(this.selectItems)
         this.setActiveClass(e)
-    
-        this.renderTimeOptions()
         
         this.closeSelect()
         this.unblockTimeSelect()
+        
+        const dayWeek = +e.target.dataset.day
+        this.renderTimeOptions(dayWeek)
     }
     
     unblockTimeSelect = () => {
@@ -165,7 +157,7 @@ class Select {
         this.selectHeader.innerText = this.selectItems[0].innerText
         this.input.value = ''
     
-        this.findRemoveClass(this.selectItems)
+        findRemoveClass(this.selectItems)
         this.closeSelect()
     }
     
@@ -193,10 +185,9 @@ const wrapper = document.querySelector('.wrapper')
 const selectDay = new Select({
     id: 'select-day',
     type: 'days',
-    selected: 0
+    selected: 1
 })
 selectDay.init()
-
 
 const selectTime = new Select({
     id: 'select-time',
