@@ -107,6 +107,7 @@ li {
     opacity: 0;
     transition: transform 0.2s;
     background: inherit;
+    text-align: center;
 
     animation-name: show;
     animation-duration: 0.5s;
@@ -136,6 +137,11 @@ li {
     box-shadow: 2px 2px 2px black;
     z-index: 1;
     border-bottom: 1px solid black;
+}
+
+.select__item--reset {
+    font-style: italic;
+
 }
 
 @keyframes show {

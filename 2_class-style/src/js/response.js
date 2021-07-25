@@ -1,5 +1,4 @@
 export const getResponse = async () => {
-    console.log(`test`)
     try {
         const response = await fetch('https://private-c6a57b-selects1.apiary-mock.com/work-hours')
         

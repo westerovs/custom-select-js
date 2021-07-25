@@ -1,18 +1,5 @@
-/*
-Возможности:
-+ Открытие
-- загрузка данных с сервера по нажатию на селект
-
-+ Закрытие (если ткнуть вне меню )
-+ Выбранный по умолчанию item по индексу ( подсветка его )
-- получать текущее значение выбранного элемента
-+ очистить select
-+ уничтожить select
-
-// доп:
-- Количество показанных item
-*/
 import {getResponse} from './response.js'
+import {getDay} from './utils.js'
 
 class Select {
     constructor(props) {
@@ -35,11 +22,13 @@ class Select {
         this.selected = props.selected
     }
     
-    createTemplateOption = (day) => {
+    createTemplateOption = (props, i) => {
+        const { dayWeek, day, month, year, totalInfo, } = props
+        // console.log(dayWeek)
         // if (i === 0) i = 'сегодня'
         // if (i === 1) i = 'завтра'
         
-        return `<li tabindex="0" class="select__item">${ day }</li>`
+        return `<li tabindex="0" class="select__item" aria-label="">${ day }.${ month }.${ year }</li>`
     }
     
     render = (container, template, place = 'beforeend') => {
@@ -52,39 +41,15 @@ class Select {
         // на время загрузки показываем сообщение в 1м option
         this.curText = this.optionReset.innerText
         this.optionReset.innerText = 'Loading...'
-    
+        
         await getResponse()
-            .then(data => {
-                if (data.success && this.typeSelect === 'days') {
-                    console.log(data)
-                    //
-                    //             const date = new Date();
-                    //
-                    //             const year = date.getFullYear();
-                    //             const month = (date.getMonth() + 1).toString().padStart(2, '0');
-                    //             const day = date.getDate().toString().padStart(2, '0');
-                    //
-                    //             console.log(`день недели: ${ day }`)
-                    //             console.log(`день: ${ date.getDay() }`)
-                    //             console.log(`месяц:  ${ month }`)
-                    //             console.log(`year:  ${ year }`)
-                    //             console.log(' ---------------------- ')
-                    //
-                    //             // data.days.forEach((day, indexDay) => {
-                    //             //     console.log(day)
-                    //             // })
-                    //
-                    //
-                    //
-                    //             // если ok - рендерим и возвращаем текст, что был в option
-                    //             // data.days.forEach(day => this.render(this.selectList, this.createTemplateOption(day)))
-                    //             // this.optionReset.innerText = this.curText
+            .then(() => {
+                // установить отображаемое количество дней в селекте
+                for (let i = 0; i < 15; i++) {
+                    this.render(this.selectList, this.createTemplateOption(getDay(i), i))
                 }
+                this.optionReset.innerText = this.curText
             })
-    }
-    
-    renderTimeOptions = async () => {
-    
     }
     
     findRemoveClass = (node, className = 'select__item--selected') => {
