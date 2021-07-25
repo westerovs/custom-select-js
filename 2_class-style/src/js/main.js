@@ -13,6 +13,7 @@
 - Количество показанных item
 */
 import {getResponse} from './response.js'
+import {getIntervalTime} from './utils.js'
 
 class Select {
     constructor(props) {
@@ -21,7 +22,9 @@ class Select {
         // time
         this.selectTime = document.getElementById('select-time')
         this.selectTimeHeader = this.selectTime.querySelector('.select__header')
+        this.selectTimeList = this.select.querySelector('.select__list')
     
+        // common
         this.selectList = this.select.querySelector('.select__list')
         this.selectHeader = this.select.querySelector('.select__header')
         this.optionReset = this.select .querySelector('.select__item--reset')
@@ -33,8 +36,11 @@ class Select {
         this.selected = props.selected
     }
     
-    findRemoveClass = (node, className = 'select__item--selected') => {
-        Array.from(node).find(item => item.classList.remove(`${ className }`))
+    createTemplateOption = (i) => {
+        if (i === 0) i = 'сегодня'
+        if (i === 1) i = 'завтра'
+        
+        return `<li tabindex="0" class="select__item">${ i }</li>`
     }
     
     render = (container, template, place = 'beforeend') => {
@@ -43,26 +49,27 @@ class Select {
         }
     }
     
-    renderOptions = async () => {
+    renderDayOptions = async () => {
         // на время загрузки показываем сообщение в 1м option
         this.curText = this.optionReset.innerText
         this.optionReset.innerText = 'Loading...'
         
         await getResponse()
             .then(data => {
-                    if (data.success && this.typeSelect === 'days') {
-                        // если ok - рендерим и возвращаем текст, что был в option
-                        data.days.forEach(day => this.render(this.selectList, this.createTemplateOption(day)))
-                        this.optionReset.innerText = this.curText
-                    }
+                if (data.success && this.typeSelect === 'days') {
+                    // если ok - рендерим и возвращаем текст, что был в option
+                    data.days.forEach(day => this.render(this.selectList, this.createTemplateOption(day)))
+                    this.optionReset.innerText = this.curText
+                }
             })
     }
     
-    createTemplateOption = (i) => {
-        if (i === 0) i = 'сегодня'
-        if (i === 1) i = 'завтра'
-        
-        return `<li tabindex="0" class="select__item">${ i }</li>`
+    renderTimeOptions = async () => {
+    
+    }
+    
+    findRemoveClass = (node, className = 'select__item--selected') => {
+        Array.from(node).find(item => item.classList.remove(`${ className }`))
     }
     
     setDefaultOption = (defaultIndex) => {
@@ -99,19 +106,6 @@ class Select {
     
     unblockTimeSelect = async () => {
         this.selectTimeHeader.disabled = false
-        
-        await getResponse()
-            .then(data => {
-                if (data.success) {
-                    // if (data.success && this.typeSelect === 'time') {
-                    //     console.log(data)
-                    //     // // если ok - рендерим и возвращаем текст, что был в option
-                    //     // console.log(data.time)
-                    //     // // data.days.forEach(day => this.render(this.selectList, this.createTemplateOption(day)))
-                    //     // this.optionReset.innerText = this.curText
-                    // }
-                }
-            })
     }
     
     openSelect = () => {
@@ -148,7 +142,7 @@ class Select {
     }
     
     init = () => {
-        this.renderOptions()
+        this.renderDayOptions()
             .then(() => {
                 this.selectItems = this.select.querySelectorAll('.select__item')
                 this.setDefaultOption(this.selected)
