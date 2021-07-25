@@ -1,24 +1,25 @@
 /*
 Возможности:
-- Открытие
++ Открытие
 - загрузка данных с сервера по нажатию на селект
 
-- Закрытие (если ткнуть вне меню )
-- Выбранный по умолчанию item по индексу ( подсветка его )
++ Закрытие (если ткнуть вне меню )
++ Выбранный по умолчанию item по индексу ( подсветка его )
 - получать текущее значение выбранного элемента
-- очистить select
-- уничтожить select
++ очистить select
++ уничтожить select
 
 // доп:
 - Количество показанных item
 */
 import {getResponse} from './response.js'
-
 class Select {
     constructor(props) {
         this.select = document.getElementById(`${ props.id }`)
         this.selectList = this.select.querySelector('.select__list')
         this.selectHeader = document.querySelector('.select__header')
+        this.optionReset = this.select .querySelector('.select__item--reset')
+        this.input = this.select.querySelector('.select__input')
         
         this.selectItems = null
         this.selected = props.selected
@@ -35,12 +36,17 @@ class Select {
     }
     
     renderOptions = async () => {
+        // на время загрузки показываем сообщение в 1м option
+        this.curText = this.optionReset.innerText
+        this.optionReset.innerText = 'Loading...'
+        
         await getResponse()
             .then(data => {
-                if (data.success) {
-                    data.days.forEach(day => this.render(this.selectList, this.createTemplateOption(day)))
-                    // this.selectItems = this.select.querySelectorAll('.select__item')
-                }
+                    if (data.success) {
+                        // если ok - рендерим и возвращаем текст, что был в option
+                        data.days.forEach(day => this.render(this.selectList, this.createTemplateOption(day)))
+                        this.optionReset.innerText = this.curText
+                    }
             })
     }
     
@@ -74,6 +80,8 @@ class Select {
         this.findRemoveClass(this.selectItems)
     
         this.selectHeader.innerText = e.target.innerText
+        this.input.value = e.target.innerText
+        
         e.target.classList.add('select__item--selected')
         this.selectHeader.classList.add('select-checked')
         this.closeSelect()
@@ -97,6 +105,7 @@ class Select {
     resetSelect = () => {
         this.selectHeader.classList.remove('select-checked')
         this.selectHeader.innerText = this.selectItems[0].innerText
+        this.input.value = ''
     
         this.findRemoveClass(this.selectItems)
         this.closeSelect()
