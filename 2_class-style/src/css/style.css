@@ -39,20 +39,21 @@ li {
 .wrapper {
     position: relative;
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
     gap: 10px 0;
 
-    margin: 50px auto;
-    padding: 10px;
-    min-width: 400px;
     width: 400px;
     min-height: 400px;
+    margin: 50px auto;
+    padding: 10px;
     outline: 2px solid black;
 }
 
 .select {
     position: relative;
-    width: 200px;
+    width: 180px;
     background: gray;
 }
 

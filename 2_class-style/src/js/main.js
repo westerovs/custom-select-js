@@ -13,14 +13,22 @@
 - Количество показанных item
 */
 import {getResponse} from './response.js'
+
 class Select {
     constructor(props) {
         this.select = document.getElementById(`${ props.id }`)
+        
+        // time
+        this.selectTime = document.getElementById('select-time')
+        this.selectTimeHeader = this.selectTime.querySelector('.select__header')
+    
         this.selectList = this.select.querySelector('.select__list')
-        this.selectHeader = document.querySelector('.select__header')
+        this.selectHeader = this.select.querySelector('.select__header')
         this.optionReset = this.select .querySelector('.select__item--reset')
         this.input = this.select.querySelector('.select__input')
         
+        this.typeSelect = props.type
+
         this.selectItems = null
         this.selected = props.selected
     }
@@ -42,7 +50,7 @@ class Select {
         
         await getResponse()
             .then(data => {
-                    if (data.success) {
+                    if (data.success && this.typeSelect === 'days') {
                         // если ok - рендерим и возвращаем текст, что был в option
                         data.days.forEach(day => this.render(this.selectList, this.createTemplateOption(day)))
                         this.optionReset.innerText = this.curText
@@ -70,7 +78,7 @@ class Select {
         }
     }
 
-    setActiveOption = (e) => {
+    checkoutActiveOption = (e) => {
         if (!e.target.closest('.select__item')) return
         if (e.target.closest('.select__item--reset')) {
             this.resetSelect()
@@ -85,6 +93,25 @@ class Select {
         e.target.classList.add('select__item--selected')
         this.selectHeader.classList.add('select-checked')
         this.closeSelect()
+        
+        this.unblockTimeSelect()
+    }
+    
+    unblockTimeSelect = async () => {
+        this.selectTimeHeader.disabled = false
+        
+        await getResponse()
+            .then(data => {
+                if (data.success) {
+                    // if (data.success && this.typeSelect === 'time') {
+                    //     console.log(data)
+                    //     // // если ok - рендерим и возвращаем текст, что был в option
+                    //     // console.log(data.time)
+                    //     // // data.days.forEach(day => this.render(this.selectList, this.createTemplateOption(day)))
+                    //     // this.optionReset.innerText = this.curText
+                    // }
+                }
+            })
     }
     
     openSelect = () => {
@@ -117,7 +144,7 @@ class Select {
         document.addEventListener('click', this.closeSelect)
         this.select.addEventListener('keydown', this.closeSelect)
         
-        this.selectList.addEventListener('click', this.setActiveOption)
+        this.selectList.addEventListener('click', this.checkoutActiveOption)
     }
     
     init = () => {
@@ -132,8 +159,16 @@ class Select {
 
 const wrapper = document.querySelector('.wrapper')
 
-const select = new Select({
+const selectDay = new Select({
     id: 'select-day',
-    selected: 1
+    type: 'days',
+    selected: 0
 })
-select.init()
+selectDay.init()
+
+const selectTime = new Select({
+    id: 'select-time',
+    type: 'time',
+    selected: 0
+})
+selectTime.init()
