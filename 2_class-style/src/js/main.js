@@ -1,6 +1,16 @@
 import {getResponse} from './response.js'
 import {getDay} from './utils.js'
 
+const timeArr = [
+    '10:10',
+    '20:10',
+    '30:10',
+    '$0:10',
+    '50:10',
+    '70:10',
+    '110:10',
+]
+
 class Select {
     constructor(props) {
         this.select = document.getElementById(`${ props.id }`)
@@ -8,7 +18,7 @@ class Select {
         // time
         this.selectTime = document.getElementById('select-time')
         this.selectTimeHeader = this.selectTime.querySelector('.select__header')
-        this.selectTimeList = this.select.querySelector('.select__list')
+        this.selectTimeList = this.selectTime.querySelector('.select__list')
     
         // common
         this.selectList = this.select.querySelector('.select__list')
@@ -49,24 +59,37 @@ class Select {
                     data-day="${ dayWeek }">${ currentData }</li>`
     }
     
+    createTemplateOptionTime = (props, i) => {
+        return `<li class="select__item">${ props }</li>`
+    }
+    
+    
     render = (container, template, place = 'beforeend') => {
         if (container instanceof Element) {
             container.insertAdjacentHTML(place, template)
         }
     }
     
-    renderDayOptions = async () => {
+    renderTimeOptions = () => {
+        timeArr.forEach(item => {
+            this.render(this.selectTimeList, this.createTemplateOptionTime(item))
+        })
+    }
+    
+    renderDayOptions = async (type) => {
         // на время загрузки показываем сообщение в 1м option
         this.curText = this.optionReset.innerText
         this.optionReset.innerText = 'Loading...'
         
         await getResponse()
             .then(() => {
-                // установить отображаемое количество дней в селекте
-                for (let i = 0; i < 15; i++) {
-                    this.render(this.selectList, this.createTemplateOption(getDay(i), i))
+                if (type === 'days') {
+                    // установить отображаемое количество дней в селекте
+                    for (let i = 0; i < 15; i++) {
+                        this.render(this.selectList, this.createTemplateOption(getDay(i), i))
+                    }
+                    this.optionReset.innerText = this.curText
                 }
-                this.optionReset.innerText = this.curText
             })
     }
     
@@ -75,6 +98,7 @@ class Select {
     }
     
     setDefaultOption = (defaultIndex) => {
+        // устанавливает выбранный эл-т при старте
         if (typeof defaultIndex === 'number' && defaultIndex > 0) {
             Array.from(this.selectItems)
                 .find((item, index) => {
@@ -82,12 +106,25 @@ class Select {
                         item.classList.add('select__item--selected')
                         this.selectHeader.innerText = item.innerText
                         this.selectHeader.classList.add('select-checked')
+                        this.input.value = item.dataset.value
+                        
+                        this.unblockTimeSelect()
                     }
                 })
         }
     }
 
-    checkoutActiveOption = (e) => {
+    setActiveClass = (e) => {
+        // set class
+        e.target.classList.add('select__item--selected')
+        this.selectHeader.classList.add('select-checked')
+        this.selectHeader.innerText = e.target.innerText
+        // в input записываем дату с выбранного эл-та
+        this.input.value = e.target.dataset.value
+        console.log(this.input.value)
+    }
+    
+    clickOnOption = (e) => {
         if (!e.target.closest('.select__item')) return
         if (e.target.closest('.select__item--reset')) {
             this.resetSelect()
@@ -95,20 +132,17 @@ class Select {
         }
     
         this.findRemoveClass(this.selectItems)
+        this.setActiveClass(e)
     
-        this.selectHeader.innerText = e.target.innerText
-        // в input записываем дату с выбранного эл-та
-        this.input.value = e.target.dataset.value
+        this.renderTimeOptions()
         
-        e.target.classList.add('select__item--selected')
-        this.selectHeader.classList.add('select-checked')
         this.closeSelect()
-        
         this.unblockTimeSelect()
     }
     
-    unblockTimeSelect = async () => {
+    unblockTimeSelect = () => {
         this.selectTimeHeader.disabled = false
+        this.selectTimeHeader.focus()
     }
     
     openSelect = () => {
@@ -141,11 +175,11 @@ class Select {
         document.addEventListener('click', this.closeSelect)
         this.select.addEventListener('keydown', this.closeSelect)
         
-        this.selectList.addEventListener('click', this.checkoutActiveOption)
+        this.selectList.addEventListener('click', this.clickOnOption)
     }
     
     init = () => {
-        this.renderDayOptions()
+        this.renderDayOptions(this.typeSelect)
             .then(() => {
                 this.selectItems = this.select.querySelectorAll('.select__item')
                 this.setDefaultOption(this.selected)
@@ -163,9 +197,9 @@ const selectDay = new Select({
 })
 selectDay.init()
 
-// const selectTime = new Select({
-//     id: 'select-time',
-//     type: 'time',
-//     selected: 0
-// })
-// selectTime.init()
+
+const selectTime = new Select({
+    id: 'select-time',
+    type: 'time',
+})
+selectTime.init()

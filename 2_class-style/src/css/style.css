@@ -82,6 +82,11 @@ li {
     cursor: not-allowed;
 }
 
+.select__header:focus {
+    outline: 1px solid white;
+    outline-offset: 1px;
+}
+
 .select__header::after {
     content: url("../img/triangle.svg");
     transition: transform 0.2s;
