@@ -4,23 +4,29 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="shortcut icon" href="#" type="image/x-icon">
-	<title>Custom select</title>
+	<title>Custom class select</title>
 	<link rel="stylesheet" href="src/css/style.css">
 </head>
 <body class="page-body">
 
-<!--<ul class="actions">-->
-<!--	<li data-type="create">create</li>-->
-<!--	<li data-type="open">open</li>-->
-<!--	<li data-type="close">close</li>-->
-<!--	<li data-type="set">set</li>-->
-<!--	<li data-type="get">get</li>-->
-<!--	<li data-type="clear">clear</li>-->
-<!--	<li data-type="destroy">destroy</li>-->
-<!--</ul>-->
-
 <div class="wrapper">
+	<div class="select hide" id="select-day">
+		<button class="select__header">Выбрать дату</button>
+		<ul class="select__list">
+			<li tabindex="0" class="select__item select__item--reset">Выбрать дату</li>
+		</ul>
+		<!-- input для удобной отправки формы -->
+		<input class="select__input xxx visually-hidden" type="text" name="day" value="">
+	</div>
 
+	<div class="select hide" id="select-time">
+		<button class="select__header" disabled>Выбрать Время</button>
+		<ul class="select__list">
+			<li tabindex="0" class="select__item select__item--reset">Выбрать Время</li>
+		</ul>
+		<!-- input для удобной отправки формы -->
+		<input type="text" name="time" value="" class="select__input visually-hidden">
+	</div>
 </div>
 
 <script type="module" src="src/js/main.js"></script>
