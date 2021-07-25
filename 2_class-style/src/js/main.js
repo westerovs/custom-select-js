@@ -24,11 +24,29 @@ class Select {
     
     createTemplateOption = (props, i) => {
         const { dayWeek, day, month, year, totalInfo, } = props
-        // console.log(dayWeek)
-        // if (i === 0) i = 'сегодня'
-        // if (i === 1) i = 'завтра'
+        const currentData = `${ day }.${ month }.${ year }`
         
-        return `<li tabindex="0" class="select__item" aria-label="">${ day }.${ month }.${ year }</li>`
+        // 0 - сегодняшний день, 1 - следующий и тд...
+        if (i === 0) {
+            return `<li tabindex="0"
+                        class="select__item"
+                        aria-label="${ currentData }"
+                        data-value="${ currentData }"
+                        data-day="${ dayWeek }">сегодня</li>`
+        }
+        if (i === 1) {
+            return `<li tabindex="0"
+                        class="select__item"
+                        aria-label="${ currentData }"
+                        data-value="${ currentData }"
+                        data-day="${ dayWeek }">завтра</li>`
+        }
+        
+        return `<li tabindex="0"
+                    class="select__item"
+                    aria-label="выбрана дата: ${ totalInfo }"
+                    data-value="${ currentData }"
+                    data-day="${ dayWeek }">${ currentData }</li>`
     }
     
     render = (container, template, place = 'beforeend') => {
@@ -79,7 +97,8 @@ class Select {
         this.findRemoveClass(this.selectItems)
     
         this.selectHeader.innerText = e.target.innerText
-        this.input.value = e.target.innerText
+        // в input записываем дату с выбранного эл-та
+        this.input.value = e.target.dataset.value
         
         e.target.classList.add('select__item--selected')
         this.selectHeader.classList.add('select-checked')
