@@ -29,56 +29,36 @@ const responseDays = {
     }
 }
 
-const currentDate = new Date
-const DAYS = [
-    'sunday',
-    'monday',
-    'tuesday',
-    'wednesday',
-    'thursday',
-    'friday',
-    'saturday'
-];
-
 const date = new Date();
 const currentDay = date.getDay();
-// console.log(currentDay)
 
-const getCurrentDayValue = () => {
-    const response = Object.entries(responseDays)
+const getDays = () => {
+    // ставил воскресенье в начало, для удобной синхронизации дней с new Date.
+    // т.к там начало недели в воскресение
+    const response = Object.entries(responseDays);
+    const sunday = response.pop()
+    response.unshift(sunday)
+    
+    let currentDayObj = null
     
     response.forEach((item, index) => {
-        switch (item[0]) {
-            case 'saturday':
-                console.log('вск', item)
-                break
-            case 'monday':
-                console.log('monday', item)
-                break
-            case 'tuesday':
-                console.log('tuesday', item)
-                break
-            case 'wednesday':
-                console.log('wednesday', item)
-                break
-            case 'thursday':
-                console.log('thursday', item)
-                break
-            case 'friday':
-                console.log('friday', item)
-                break
+        if (index === currentDay) {
+            currentDayObj = item[1]
         }
     })
+    
+    return currentDayObj
 }
 
-getCurrentDayValue()
+let dayTime = getDays()
 
+console.log(dayTime)
 
 // функция принимает старт и end и рендерит интервалы от текущего времени
-const getIntervalTime = (start, end) => {
+const getTimes = (start, end) => {
     console.log(start, end)
 }
 
 export {
-    getIntervalTime
+    getTimes
 }

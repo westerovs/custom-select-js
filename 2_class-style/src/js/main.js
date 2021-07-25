@@ -13,7 +13,7 @@
 - Количество показанных item
 */
 import {getResponse} from './response.js'
-import {getIntervalTime} from './utils.js'
+import {getTimes} from './utils.js'
 
 class Select {
     constructor(props) {
