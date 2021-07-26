@@ -1,4 +1,5 @@
 import {createTemplateOption} from './view/templateOption.js'
+import {createTempOptionTime} from './view/tempOptionTime.js'
 import {getResponse} from './response.js'
 import {render, findRemoveClass, getDay, getTimes} from './utils.js'
 
@@ -18,6 +19,7 @@ const initSelects = (select, indexSelect) => {
     // time
     const selectTime = document.getElementById('select-time')
     const selectTimeHeader = selectTime.querySelector('.select__header')
+    const selectTimeList = selectTime.querySelector('.select__list')
     
     // активный по умолчанию: 1 - init сегодня, 2 - завтра и тд..
     const selected = 1
@@ -29,8 +31,12 @@ const initSelects = (select, indexSelect) => {
                 const startTime = data.time[day].start
                 const endTime = data.time[day].end
                 
-                getTimes(startTime, endTime)
-                // render ...
+                const timeArr = getTimes(startTime, endTime)
+    
+                selectTimeList.innerHTML = ''
+                timeArr.forEach(time => {
+                    render(selectTimeList, createTempOptionTime(time))
+                })
             })
     }
     

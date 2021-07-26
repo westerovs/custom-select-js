@@ -63,7 +63,6 @@ const getTimes = (start, end) => {
         loop()
     }
     loop()
-    console.log(timeArr)
     
     return timeArr
 }
