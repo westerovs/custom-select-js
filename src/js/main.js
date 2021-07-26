@@ -29,6 +29,8 @@ const initSelects = (select, indexSelect) => {
         await getResponse()
             .then(data => {
                 if (data.success && typeOption === 'days') {
+                    selectTimeHeader.innerText = 'Выбрать время'
+    
                     const startTime = data.time[day].start
                     const endTime = data.time[day].end
     
@@ -168,7 +170,7 @@ const initSelects = (select, indexSelect) => {
         setHandlers()
     }
     
-    init(0)
+    init(1)
 }
 
 allSelect.forEach(initSelects)
