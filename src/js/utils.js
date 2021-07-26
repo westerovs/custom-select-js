@@ -53,14 +53,22 @@ const getTimes = (start, end) => {
     
     let timeArr = []
     
+    // счётчик для интервала
     let i = 0
     // получить даты и пушить их до тех пор, пока условие верно
     function loop() {
-        if (dateStart(i + interval).getHours() > dateEnd().getHours()) return
-        
-        timeArr.push(`${ dateStart(i + interval).getHours() } : ${ dateStart(i * interval).getMinutes() }`)
-        i += interval
-        loop()
+        try {
+            if (dateStart(i + interval).getHours() > dateEnd().getHours()) {
+                i = 0
+                return
+            }
+    
+            timeArr.push(`${ dateStart(i + interval).getHours() } : ${ dateStart(i * interval).getMinutes() }`)
+            i += interval
+            loop()
+        } catch (e) {
+            console.log(e)
+        }
     }
     loop()
     

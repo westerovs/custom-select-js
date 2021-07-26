@@ -106,11 +106,12 @@ const initSelects = (select, indexSelect) => {
         findRemoveClass(selectItems)
         
         setActiveClass(e)
-        closeSelect()
         unblockTimeSelect()
         
         const dayWeek = +e.target.dataset.day
         renderTimeOptions(dayWeek)
+        closeSelect()
+    
     }
     
     const unblockTimeSelect = () => {
