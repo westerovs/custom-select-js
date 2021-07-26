@@ -4,7 +4,7 @@ const render = (container, template, place = 'beforeend') => {
     }
 }
 
-const findRemoveClass = (node, className = 'select__item--selected') => {
+const findRemoveClass = (node, className = 'select__option--selected') => {
     Array.from(node).find(item => item.classList.remove(`${ className }`))
 }
 
@@ -14,7 +14,7 @@ const getDay = (dayIncrement = 0) => {
     
     const totalInfo = new Date(`${ (date.getMonth() + 1) }, ${ date.getDate() }, ${ date.getFullYear() }`);
     
-    return  {
+    return {
         dayWeek: date.getDay(),
         day: date.getDate().toString().padStart(2, '0'),
         month: (date.getMonth() + 1).toString().padStart(2, '0'),

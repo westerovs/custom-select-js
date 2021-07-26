@@ -4,6 +4,7 @@ export const getResponse = async () => {
         
         return await response.json().then(data => {
             if (data.success) {
+                const success = data.success
                 const days = Object.entries(data.results).map(day => day[0])
                 const time = Object.entries(data.results).map(time => time[1])
     
@@ -13,6 +14,7 @@ export const getResponse = async () => {
                 days.unshift(sunday)
                 
                 return {
+                    success,
                     days,
                     time
                 }
