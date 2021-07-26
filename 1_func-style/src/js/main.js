@@ -20,7 +20,7 @@ const initSelects = (select, indexSelect) => {
     const selectTimeHeader = selectTime.querySelector('.select__header')
     
     // активный по умолчанию: 1 - init сегодня, 2 - завтра и тд..
-    const selected = 0
+    const selected = 1
     let selectItems = null
     
     const renderTimeOptions = async (day) => {
@@ -143,7 +143,7 @@ const initSelects = (select, indexSelect) => {
         selectList.removeEventListener('click', clickOnOption)
     }
 
-    const init = () => {
+    const init = (selected) => {
         renderDayOptions(type)
             .then(() => {
                 selectItems = select.querySelectorAll('.select__option')
@@ -152,7 +152,7 @@ const initSelects = (select, indexSelect) => {
         setHandlers()
     }
     
-    init()
+    init(selected)
 }
 
 allSelect.forEach(initSelects)
