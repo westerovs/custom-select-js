@@ -6,9 +6,9 @@ import {render, findRemoveClass, getDay, getTimes} from './utils.js'
 const allSelect = document.querySelectorAll('.select')
 
 const initSelects = (select, indexSelect) => {
-    let type = null
-    if (indexSelect === 0) type = 'days'
-    if (indexSelect === 1) type = 'time'
+    let typeOption = null
+    if (indexSelect === 0) typeOption = 'days'
+    if (indexSelect === 1) typeOption = 'time'
     
     // common
     const selectList = select.querySelector('.select__list')
@@ -28,15 +28,17 @@ const initSelects = (select, indexSelect) => {
     const renderTimeOptions = async (day) => {
         await getResponse()
             .then(data => {
-                const startTime = data.time[day].start
-                const endTime = data.time[day].end
-                
-                const timeArr = getTimes(startTime, endTime)
+                if (data.success && typeOption === 'days') {
+                    const startTime = data.time[day].start
+                    const endTime = data.time[day].end
     
-                selectTimeList.innerHTML = ''
-                timeArr.forEach(time => {
-                    render(selectTimeList, createTempOptionTime(time))
-                })
+                    const timeArr = getTimes(startTime, endTime)
+    
+                    selectTimeList.innerHTML = ''
+                    timeArr.forEach(time => {
+                        render(selectTimeList, createTempOptionTime(time))
+                    })
+                }
             })
     }
     
@@ -83,8 +85,15 @@ const initSelects = (select, indexSelect) => {
         selectHeader.innerText = e.target.innerText
         
         // в input записываем дату с выбранного эл-та
-        input.value = e.target.dataset.value
-        console.log(`выбранный день: ${ input.value }`)
+        if (typeOption === 'days') {
+            input.value = e.target.dataset.value
+            console.log(`выбранный день: ${ input.value }`)
+        }
+        if (typeOption === 'time') {
+            input.value = e.target.dataset.value
+            console.log(`выбранное время: ${ input.value }`)
+        }
+        
     }
     
     const clickOnOption = (e) => {
@@ -150,7 +159,7 @@ const initSelects = (select, indexSelect) => {
     }
 
     const init = (selected) => {
-        renderDayOptions(type)
+        renderDayOptions(typeOption)
             .then(() => {
                 selectItems = select.querySelectorAll('.select__option')
                 setDefaultOption(selected)
@@ -158,7 +167,7 @@ const initSelects = (select, indexSelect) => {
         setHandlers()
     }
     
-    init(selected)
+    init(0)
 }
 
 allSelect.forEach(initSelects)
